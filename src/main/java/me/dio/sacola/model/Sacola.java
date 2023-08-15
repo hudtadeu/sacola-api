@@ -27,6 +27,17 @@ public class Sacola {
   private Double valorTotal;
 
   @Enumerated
-  private FormaPagamento Formapagamento;
+  private FormaPagamento FormaPagamento;
   private boolean fechada;
+
+  public Sacola() {}
+
+  public Sacola(Long id, Cliente cliente, List<Item> itens, Double valorTotal, FormaPagamento formaPagamento, Boolean fechada) {
+    this.id = id;
+    this.cliente =cliente;
+    this.itens = itens;
+    this.valorTotal = valorTotal;
+    FormaPagamento = formaPagamento;
+    this.fechada = fechada;
+  }
 }
