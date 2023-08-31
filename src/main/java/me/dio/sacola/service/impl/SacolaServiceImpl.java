@@ -1,5 +1,6 @@
 package me.dio.sacola.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ import me.dio.sacola.service.SacolaService;
 @RequiredArgsConstructor
 public class SacolaServiceImpl implements SacolaService {
   private final SacolaRepository sacolaRepository;
-  private final ProdutoRepository produtoRepository; 
+  private final ProdutoRepository produtoRepository;
   private final ItemRepository itemRepository;
 
   @Override
@@ -51,8 +52,21 @@ public class SacolaServiceImpl implements SacolaService {
         throw new RuntimeException("Não é possível adicionar produtos de restaurantes diferentes. Feche a sacola ou esvazia.");
       }
     }
+
+    List<Double> valorDosItens = new ArrayList<>();
+
+    for(Item itemDaSacola: itensDaSacola) {
+      double valorTotalItem = itemDaSacola.getProduto().getValorUnitario() * itemDaSacola.getQuantidade();
+      valorDosItens.add(valorTotalItem);
+    }
+
+    double valorTotalSacola = valorDosItens.stream()
+      .mapToDouble(valorTotalDeCadaItem -> valorTotalDeCadaItem)
+      .sum();
+
+      sacola.setValorTotal(valorTotalSacola);
     sacolaRepository.save(sacola);
-    return itemRepository.save(itemParaSerInserido);
+    return itemParaSerInserido;
   }
 
   @Override
